@@ -444,6 +444,18 @@ window.CryptoMiner.UI = (function () {
     if (modal) modal.hidden = true;
   }
 
+  /**
+   * 現在の所持値をセットしてチートモーダルを開く
+   */
+  function openCheatModal() {
+    const state = Engine.getState();
+    const coinsInput = document.getElementById("cheat-coins-input");
+    const gbInput = document.getElementById("cheat-gb-input");
+    if (coinsInput) coinsInput.value = Math.floor(state.coins).toString();
+    if (gbInput) gbInput.value = Math.floor(state.genesisBlocks).toString();
+    openModal("modal-cheat");
+  }
+
   return {
     cacheElements,
     getBuyMode,
@@ -458,6 +470,7 @@ window.CryptoMiner.UI = (function () {
     spawnFloatingText,
     showToast,
     openModal,
-    closeModal
+    closeModal,
+    openCheatModal
   };
 })();

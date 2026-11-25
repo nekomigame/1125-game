@@ -943,6 +943,40 @@ input:checked + .slider::before {
   color: var(--text-muted);
 }
 
+/* チートコンソールモーダル */
+.cheat-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.cheat-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cheat-input {
+  width: 100%;
+  background: var(--bg-base);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-main);
+  padding: 9px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+}
+
+.cheat-input:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+}
+
+.cheat-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 /* トースト通知 */
 .toast-container {
   position: fixed;

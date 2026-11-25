@@ -259,6 +259,41 @@
     </div>
   </div>
 
+  <!-- チートコンソールモーダル（コナミコマンドで起動） -->
+  <div class="modal-backdrop" id="modal-cheat" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-cheat-title">
+      <div class="modal-header">
+        <h2 id="modal-cheat-title">🛠️ チートコンソール</h2>
+        <button type="button" class="modal-close" data-close-modal="modal-cheat" aria-label="閉じる">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="cheat-desc">所持 COIN とジェネシスブロック (GB) の個数を自由に変更できます。</p>
+        <div class="cheat-field">
+          <label for="cheat-coins-input" class="io-label">所持 COIN</label>
+          <input type="number" id="cheat-coins-input" class="cheat-input" min="0" step="any" placeholder="0">
+          <div class="cheat-quick-actions">
+            <button type="button" class="btn btn-secondary btn-sm" data-cheat-add-coins="1000000">+1M Coin</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-cheat-add-coins="1000000000">+1B Coin</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-cheat-add-coins="1000000000000">+1T Coin</button>
+          </div>
+        </div>
+        <div class="cheat-field">
+          <label for="cheat-gb-input" class="io-label">ジェネシスブロック (GB)</label>
+          <input type="number" id="cheat-gb-input" class="cheat-input" min="0" step="1" placeholder="0">
+          <div class="cheat-quick-actions">
+            <button type="button" class="btn btn-secondary btn-sm" data-cheat-add-gb="10">+10 GB</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-cheat-add-gb="100">+100 GB</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-cheat-add-gb="1000">+1,000 GB</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="modal-cheat">キャンセル</button>
+          <button type="button" class="btn btn-primary" id="btn-apply-cheat">変更を適用</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- トースト通知コンテナ -->
   <div class="toast-container" id="toast-container" aria-live="polite"></div>
 </body>

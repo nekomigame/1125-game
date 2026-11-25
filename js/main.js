@@ -231,4 +231,77 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("beforeunload", () => {
     Storage.save(Engine.getState());
   });
+
+  // コナミコマンド（↑↑↓↓←→←→BA）によるチート画面の起動
+  const KONAMI_SEQUENCE = [
+    "ArrowUp", "ArrowUp",
+    "ArrowDown", "ArrowDown",
+    "ArrowLeft", "ArrowRight",
+    "ArrowLeft", "ArrowRight",
+    "b", "a"
+  ];
+  let konamiIndex = 0;
+
+  document.addEventListener("keydown", (e) => {
+    const tag = e.target && e.target.tagName;
+    if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (key === KONAMI_SEQUENCE[konamiIndex]) {
+      konamiIndex += 1;
+      if (konamiIndex === KONAMI_SEQUENCE.length) {
+        konamiIndex = 0;
+        UI.openCheatModal();
+        UI.showToast("チートコンソールを起動しました。", "achievement");
+      }
+    } else if (konamiIndex === 2 && key === "ArrowUp") {
+      // 上キーが3回以上続いた場合は2回入力済みの状態を維持する
+      konamiIndex = 2;
+    } else {
+      konamiIndex = key === KONAMI_SEQUENCE[0] ? 1 : 0;
+    }
+  });
+
+  // チート画面のクイック加算ボタン
+  document.querySelectorAll("[data-cheat-add-coins]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const input = document.getElementById("cheat-coins-input");
+      const current = Number(input.value) || 0;
+      const delta = Number(btn.dataset.cheatAddCoins) || 0;
+      input.value = Math.max(0, current + delta).toString();
+    });
+  });
+
+  document.querySelectorAll("[data-cheat-add-gb]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const input = document.getElementById("cheat-gb-input");
+      const current = Number(input.value) || 0;
+      const delta = Number(btn.dataset.cheatAddGb) || 0;
+      input.value = Math.max(0, Math.floor(current + delta)).toString();
+    });
+  });
+
+  // チート設定の適用
+  document.getElementById("btn-apply-cheat").addEventListener("click", () => {
+    const coinsRaw = Number(document.getElementById("cheat-coins-input").value);
+    const gbRaw = Number(document.getElementById("cheat-gb-input").value);
+
+    if (!Number.isFinite(coinsRaw) || coinsRaw < 0 || !Number.isFinite(gbRaw) || gbRaw < 0) {
+      UI.showToast("0以上の有効な数値を入力してください。");
+      return;
+    }
+
+    const state = Engine.getState();
+    state.coins = coinsRaw;
+    if (coinsRaw > state.runCoins) state.runCoins = coinsRaw;
+    if (coinsRaw > state.totalCoins) state.totalCoins = coinsRaw;
+    state.genesisBlocks = Math.floor(gbRaw);
+
+    Engine.checkAchievements();
+    Storage.save(state);
+    UI.renderAllLists();
+    UI.updateDynamicUI();
+    UI.closeModal("modal-cheat");
+    UI.showToast("チート設定を適用しました。", "achievement");
+  });
 });
