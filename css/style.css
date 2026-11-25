@@ -1,0 +1,1004 @@
+/* =========================================================
+   Crypto Miner Idle - スタイルシート
+   サイバー／ターミナル調ダークテーマ & レスポンシブレイアウト
+   ========================================================= */
+
+:root {
+  --bg-base: #070b12;
+  --bg-panel: #0f1623;
+  --bg-card: #162032;
+  --bg-card-hover: #1d2a42;
+  --border-color: #24324a;
+  --text-main: #e6edf7;
+  --text-muted: #8a9bb5;
+  --accent-green: #10b981;
+  --accent-green-glow: rgba(16, 185, 129, 0.35);
+  --accent-cyan: #06b6d4;
+  --accent-amber: #f59e0b;
+  --accent-amber-glow: rgba(245, 158, 11, 0.3);
+  --accent-red: #ef4444;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --font-sans: "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  --font-mono: "Consolas", "Monaco", "Courier New", monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-base);
+  background-image:
+    radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.08), transparent 35%),
+    radial-gradient(circle at 85% 80%, rgba(16, 185, 129, 0.07), transparent 40%);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.text-green { color: var(--accent-green); }
+.text-cyan { color: var(--accent-cyan); }
+.text-amber { color: var(--accent-amber); }
+
+.app-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 100vh;
+}
+
+/* ヘッダー */
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 12px 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  font-size: 1.8rem;
+}
+
+.brand-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--accent-cyan);
+}
+
+.brand-sub {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+.header-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.stat-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 5px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.stat-label {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ボタン共通 */
+.btn {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.15s ease, opacity 0.15s ease;
+  color: var(--text-main);
+  background: var(--bg-card);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-sm {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.btn-primary {
+  background: var(--accent-green);
+  color: #041b12;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #14d394;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--bg-card-hover);
+}
+
+.btn-amber {
+  background: var(--accent-amber);
+  color: #1f1302;
+}
+
+.btn-amber:hover:not(:disabled) {
+  background: #fbbf24;
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: var(--accent-red);
+  color: #fca5a5;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--accent-red);
+  color: #fff;
+}
+
+/* メインレイアウト */
+.main-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 16px;
+  flex: 1;
+  align-items: start;
+}
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+}
+
+/* 左パネル：マイニングエリア */
+.mining-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.coin-display {
+  text-align: center;
+  padding: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.coin-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+.coin-amount {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent-green);
+  font-variant-numeric: tabular-nums;
+  margin: 4px 0;
+}
+
+.coin-cps {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--accent-cyan);
+  font-variant-numeric: tabular-nums;
+}
+
+.click-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 0;
+  user-select: none;
+}
+
+.mine-button {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-green);
+  background: radial-gradient(circle at 35% 30%, #16322b, #0a141d);
+  color: var(--text-main);
+  cursor: pointer;
+  box-shadow: 0 0 28px var(--accent-green-glow), inset 0 0 18px rgba(16, 185, 129, 0.2);
+  transition: transform 0.08s ease, box-shadow 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mine-button:hover {
+  box-shadow: 0 0 38px rgba(16, 185, 129, 0.5), inset 0 0 22px rgba(16, 185, 129, 0.3);
+}
+
+.mine-button:active {
+  transform: scale(0.94);
+}
+
+.mine-core {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.mine-icon {
+  font-size: 2.4rem;
+}
+
+.mine-text {
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--accent-green);
+}
+
+.mine-sub {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* フローティング数値 */
+.floating-text {
+  position: absolute;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--accent-green);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  animation: floatUp 0.85s ease-out forwards;
+  z-index: 10;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -64px) scale(1.15);
+  }
+}
+
+/* ハードフォーク要約カード */
+.fork-summary-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fork-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fork-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.fork-badge {
+  font-size: 0.72rem;
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.fork-info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+}
+
+.fork-progress-wrap {
+  height: 8px;
+  background: var(--bg-base);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.fork-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-amber));
+  transition: width 0.25s ease;
+}
+
+.fork-next-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.mini-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.mini-stat-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.mini-stat-item span:last-child {
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+/* 右パネル：タブ & リスト */
+.shop-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  background: var(--bg-base);
+  padding: 5px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 9px 8px;
+  border-radius: 7px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.tab-btn:hover {
+  color: var(--text-main);
+}
+
+.tab-btn.active {
+  background: var(--bg-card);
+  color: var(--accent-cyan);
+  box-shadow: inset 0 0 0 1px var(--border-color);
+}
+
+.tab-badge {
+  font-size: 0.7rem;
+  background: var(--accent-green);
+  color: #041b12;
+  padding: 1px 6px;
+  border-radius: 999px;
+  display: none;
+}
+
+.tab-badge.visible {
+  display: inline-block;
+}
+
+.tab-content {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tab-content.active {
+  display: flex;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.toolbar-label {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.buy-mode-group {
+  display: flex;
+  gap: 4px;
+}
+
+.mode-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mode-btn.active {
+  background: var(--accent-cyan);
+  color: #041a20;
+  border-color: var(--accent-cyan);
+}
+
+/* 設備・ジェネシスカード */
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rig-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.rig-card.affordable {
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.rig-card.locked {
+  opacity: 0.55;
+  filter: grayscale(0.8);
+}
+
+.rig-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.rig-icon {
+  font-size: 1.8rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-base);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.rig-info {
+  min-width: 0;
+}
+
+.rig-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rig-name {
+  font-weight: 700;
+  font-size: 0.96rem;
+}
+
+.rig-count {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background: var(--bg-base);
+  padding: 1px 7px;
+  border-radius: 6px;
+  color: var(--accent-cyan);
+}
+
+.rig-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.rig-production {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-green);
+  margin-top: 3px;
+}
+
+.rig-buy-btn {
+  min-width: 128px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.rig-buy-qty {
+  font-size: 0.72rem;
+  opacity: 0.85;
+}
+
+.rig-buy-cost {
+  font-family: var(--font-mono);
+  font-weight: 800;
+}
+
+/* アップグレードグリッド */
+.upgrade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.upgrade-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.upgrade-card.affordable {
+  border-color: rgba(16, 185, 129, 0.55);
+}
+
+.upgrade-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.upgrade-icon {
+  font-size: 1.3rem;
+}
+
+.upgrade-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.upgrade-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.purchased-section {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+}
+
+.section-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.purchased-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.purchased-chip {
+  background: var(--bg-base);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ジェネシス・オートバイヤー */
+.genesis-banner {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(6, 182, 212, 0.08));
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.genesis-banner-title {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.genesis-banner-value {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent-amber);
+}
+
+.genesis-passive {
+  font-size: 0.85rem;
+}
+
+.autobuyer-panel {
+  background: var(--bg-card);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+}
+
+.autobuyer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.autobuyer-desc {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* トグルスイッチ */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: var(--bg-base);
+  border: 1px solid var(--border-color);
+  transition: 0.2s;
+  border-radius: 999px;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--text-muted);
+  transition: 0.2s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+}
+
+input:checked + .slider::before {
+  transform: translateX(20px);
+  background-color: #041a20;
+}
+
+/* 実績グリッド */
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.achievement-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  opacity: 0.5;
+}
+
+.achievement-card.unlocked {
+  opacity: 1;
+  border-color: var(--accent-green);
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.08), var(--bg-card));
+}
+
+.achievement-title {
+  font-weight: 700;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.achievement-desc {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* モーダル */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 100;
+}
+
+.modal-backdrop[hidden] {
+  display: none;
+}
+
+.modal {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+  font-size: 1rem;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-center {
+  text-align: center;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.save-io-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.io-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+#save-io-textarea {
+  width: 100%;
+  background: var(--bg-base);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-main);
+  padding: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  resize: vertical;
+}
+
+.danger-zone {
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.offline-reward,
+.fork-modal-reward {
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent-green);
+  text-align: center;
+  padding: 10px;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+}
+
+.fork-modal-reward {
+  color: var(--accent-amber);
+}
+
+.fork-modal-notes {
+  padding-left: 18px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* トースト通知 */
+.toast-container {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 200;
+}
+
+.toast {
+  background: var(--bg-card);
+  border: 1px solid var(--accent-cyan);
+  border-left: 4px solid var(--accent-cyan);
+  color: var(--text-main);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  animation: slideIn 0.2s ease-out;
+}
+
+.toast.achievement {
+  border-color: var(--accent-amber);
+  border-left-color: var(--accent-amber);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 900px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .app-header {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .rig-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .rig-buy-btn {
+    width: 100%;
+  }
+}

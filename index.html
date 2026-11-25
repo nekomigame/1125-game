@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Miner Idle - 仮想通貨マイニング放置ゲーム</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- 依存順にスクリプトを読み込み（file:// プロトコルでも動作） -->
+  <script defer src="js/data.js"></script>
+  <script defer src="js/format.js"></script>
+  <script defer src="js/engine.js"></script>
+  <script defer src="js/storage.js"></script>
+  <script defer src="js/ui.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- ヘッダー -->
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-icon" aria-hidden="true">⛏️</span>
+        <div>
+          <h1 class="brand-title">CRYPTO MINER IDLE</h1>
+          <p class="brand-sub">BLOCKCHAIN HASHING SIMULATOR</p>
+        </div>
+      </div>
+
+      <div class="header-stats">
+        <div class="stat-pill">
+          <span class="stat-label">所持コイン</span>
+          <span class="stat-value text-green" id="header-coins">0</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">採掘速度</span>
+          <span class="stat-value text-cyan" id="header-cps">0/s</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">ジェネシス</span>
+          <span class="stat-value text-amber" id="header-gb">0 GB</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-toggle-notation" title="数値表記の切り替え">
+          表記: <span id="notation-label">接尾辞</span>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-open-settings">
+          設定 / 保存
+        </button>
+      </div>
+    </header>
+
+    <!-- メイン2カラムレイアウト -->
+    <main class="main-layout">
+      <!-- 左パネル：手動マイニング＆ステータス -->
+      <section class="panel mining-panel" aria-label="マイニングエリア">
+        <div class="coin-display">
+          <div class="coin-label">BALANCE (CRYPTO COIN)</div>
+          <div class="coin-amount" id="main-coins">0</div>
+          <div class="coin-cps">
+            <span id="main-cps">0</span> Coin / 秒
+          </div>
+        </div>
+
+        <!-- クリック領域 -->
+        <div class="click-stage" id="click-stage">
+          <button type="button" class="mine-button" id="btn-mine" aria-label="ハッシュ計算を実行して採掘する">
+            <span class="mine-ring"></span>
+            <span class="mine-core">
+              <span class="mine-icon">⚡</span>
+              <span class="mine-text">MINE HASH</span>
+              <span class="mine-sub" id="click-power-text">+1 Coin / click</span>
+            </span>
+          </button>
+        </div>
+
+        <!-- 周回ステータス＆ハードフォーク予告カード -->
+        <div class="fork-summary-card">
+          <div class="fork-summary-header">
+            <span class="fork-title">ハードフォーク進捗</span>
+            <span class="fork-badge" id="fork-count-badge">転生回数: 0</span>
+          </div>
+          <div class="fork-info-row">
+            <span>獲得可能:</span>
+            <strong class="text-amber" id="pending-gb">+0 GB</strong>
+          </div>
+          <div class="fork-progress-wrap">
+            <div class="fork-progress-bar" id="fork-progress-bar"></div>
+          </div>
+          <div class="fork-next-text" id="fork-next-text">
+            次の GB まで: 1.00 M Coin
+          </div>
+          <button type="button" class="btn btn-amber btn-full" id="btn-open-fork-modal" disabled>
+            ハードフォークを実行
+          </button>
+        </div>
+
+        <!-- ミニ統計 -->
+        <div class="mini-stats">
+          <div class="mini-stat-item">
+            <span>今回累計</span>
+            <span id="stat-run-coins">0</span>
+          </div>
+          <div class="mini-stat-item">
+            <span>総クリック数</span>
+            <span id="stat-total-clicks">0</span>
+          </div>
+          <div class="mini-stat-item">
+            <span>全採掘倍率</span>
+            <span id="stat-total-mult">x1.00</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 右パネル：ショップ・アップグレード・転生・実績 -->
+      <section class="panel shop-panel" aria-label="ショップと管理">
+        <nav class="tabs" role="tablist">
+          <button type="button" class="tab-btn active" role="tab" data-tab="rigs" aria-selected="true">
+            設備 <span class="tab-badge" id="badge-rigs"></span>
+          </button>
+          <button type="button" class="tab-btn" role="tab" data-tab="upgrades" aria-selected="false">
+            強化 <span class="tab-badge" id="badge-upgrades"></span>
+          </button>
+          <button type="button" class="tab-btn" role="tab" data-tab="genesis" aria-selected="false">
+            フォーク <span class="tab-badge" id="badge-genesis"></span>
+          </button>
+          <button type="button" class="tab-btn" role="tab" data-tab="achievements" aria-selected="false">
+            実績 <span class="tab-badge" id="badge-achievements"></span>
+          </button>
+        </nav>
+
+        <!-- タブ1：マイニング設備 -->
+        <div class="tab-content active" id="tab-rigs" role="tabpanel">
+          <div class="toolbar">
+            <span class="toolbar-label">購入数量:</span>
+            <div class="buy-mode-group" id="buy-mode-group">
+              <button type="button" class="mode-btn active" data-mode="1">x1</button>
+              <button type="button" class="mode-btn" data-mode="10">x10</button>
+              <button type="button" class="mode-btn" data-mode="100">x100</button>
+              <button type="button" class="mode-btn" data-mode="max">Max</button>
+            </div>
+          </div>
+          <div class="item-list" id="rigs-list"></div>
+        </div>
+
+        <!-- タブ2：通常アップグレード -->
+        <div class="tab-content" id="tab-upgrades" role="tabpanel">
+          <div class="toolbar">
+            <span class="toolbar-label">利用可能な強化</span>
+            <button type="button" class="btn btn-primary btn-sm" id="btn-buy-all-upgrades">
+              すべて購入
+            </button>
+          </div>
+          <div class="upgrade-grid" id="upgrades-list"></div>
+          <div class="purchased-section">
+            <h3 class="section-subtitle">購入済み (<span id="purchased-upgrade-count">0</span>)</h3>
+            <div class="purchased-grid" id="purchased-upgrades-list"></div>
+          </div>
+        </div>
+
+        <!-- タブ3：ハードフォーク（永続強化） -->
+        <div class="tab-content" id="tab-genesis" role="tabpanel">
+          <div class="genesis-banner">
+            <div>
+              <div class="genesis-banner-title">所持ジェネシスブロック</div>
+              <div class="genesis-banner-value" id="genesis-balance">0 GB</div>
+            </div>
+            <div class="genesis-passive">
+              パッシブ効果: 全採掘量 <strong class="text-amber" id="genesis-passive-bonus">+0%</strong>
+            </div>
+          </div>
+
+          <div class="autobuyer-panel" id="autobuyer-panel" hidden>
+            <div class="autobuyer-header">
+              <span>🤖 自動投資ボット (オートバイヤー)</span>
+              <label class="switch">
+                <input type="checkbox" id="toggle-autobuyer">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <p class="autobuyer-desc">有効時、1秒ごとに購入可能な最安設備・強化を自動購入します。</p>
+          </div>
+
+          <div class="item-list" id="genesis-shop-list"></div>
+        </div>
+
+        <!-- タブ4：実績 -->
+        <div class="tab-content" id="tab-achievements" role="tabpanel">
+          <div class="toolbar">
+            <span class="toolbar-label">達成状況: <strong id="achievement-summary">0 / 0</strong></span>
+            <span class="text-green" id="achievement-bonus-text">ボーナス: +0%</span>
+          </div>
+          <div class="achievement-grid" id="achievements-list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 設定 / セーブ管理モーダル -->
+  <div class="modal-backdrop" id="modal-settings" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-settings-title">
+      <div class="modal-header">
+        <h2 id="modal-settings-title">設定 / セーブデータ管理</h2>
+        <button type="button" class="modal-close" data-close-modal="modal-settings" aria-label="閉じる">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-actions">
+          <button type="button" class="btn btn-primary" id="btn-manual-save">今すぐセーブ</button>
+          <button type="button" class="btn btn-secondary" id="btn-export-save">データ書き出し</button>
+          <button type="button" class="btn btn-secondary" id="btn-import-save">データ読み込み</button>
+        </div>
+        <div class="save-io-wrap">
+          <label for="save-io-textarea" class="io-label">セーブデータ文字列（エクスポート / インポート用）</label>
+          <textarea id="save-io-textarea" rows="4" placeholder="ここにセーブ文字列を貼り付けて「データ読み込み」を押してください"></textarea>
+        </div>
+        <div class="danger-zone">
+          <p>セーブデータを完全に消去して最初からやり直します。</p>
+          <button type="button" class="btn btn-danger btn-sm" id="btn-hard-reset">データを完全初期化</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- オフライン復帰ボーナスモーダル -->
+  <div class="modal-backdrop" id="modal-offline" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-offline-title">
+      <div class="modal-header">
+        <h2 id="modal-offline-title">おかえりなさい！</h2>
+        <button type="button" class="modal-close" data-close-modal="modal-offline" aria-label="閉じる">×</button>
+      </div>
+      <div class="modal-body modal-center">
+        <p class="offline-time">オフライン経過時間: <strong id="offline-duration">0秒</strong></p>
+        <p class="offline-desc">不在の間もマイニング設備が稼働していました！</p>
+        <div class="offline-reward" id="offline-reward">+0 Coin</div>
+        <button type="button" class="btn btn-primary btn-full" data-close-modal="modal-offline">報酬を受け取る</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ハードフォーク確認モーダル -->
+  <div class="modal-backdrop" id="modal-fork" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-fork-title">
+      <div class="modal-header">
+        <h2 id="modal-fork-title">ハードフォークを実行しますか？</h2>
+        <button type="button" class="modal-close" data-close-modal="modal-fork" aria-label="閉じる">×</button>
+      </div>
+      <div class="modal-body">
+        <p>現在のコイン・設備・通常強化はリセットされますが、以下のジェネシスブロックを獲得できます。</p>
+        <div class="fork-modal-reward" id="fork-modal-reward">+0 GB</div>
+        <ul class="fork-modal-notes">
+          <li>ジェネシスブロックと永続強化・実績は引き継がれます。</li>
+          <li>所持 GB 1個ごとに全採掘量が +10% 増加します。</li>
+        </ul>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="modal-fork">キャンセル</button>
+          <button type="button" class="btn btn-amber" id="btn-confirm-fork">ハードフォーク実行</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- トースト通知コンテナ -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+</body>
+</html>
